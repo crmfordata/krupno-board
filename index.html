@@ -95,8 +95,7 @@
   .f label{font-size:10.5px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
   .f input{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;font-family:inherit;background:var(--bg2);outline:none;transition:border-color .15s, box-shadow .15s, background .15s}
   .f input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
-  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
-  .res{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg2);transition:transform .15s, box-shadow .15s}
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}  .res{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg2);transition:transform .15s, box-shadow .15s}
   .res:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
   .res .v{font-size:19px;font-weight:800;letter-spacing:-.3px}
   .res .l{font-size:11px;color:var(--muted);margin-top:2px}
@@ -105,7 +104,31 @@
   .res.dark{background:var(--ink);border-color:var(--ink)}
   .res.dark .v{color:#fff}
   .res.dark .l{color:#b9b4a6}
-  .foot{margin-top:18px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+  .foot{margin-top:18px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .foot button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--ink);font-size:12px;font-family:inherit;font-weight:600;transition:all .15s}
+  .foot button:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+  /* Шапка: обновлено */
+  .updated{margin-left:auto;font-size:16px;font-weight:700;color:var(--muted);white-space:nowrap}
+  .updated .pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--done);margin-right:8px;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  /* Раскрытие секций */
+  .expand-btn{width:100%;border:none;background:transparent;color:var(--muted);font-size:11.5px;font-weight:600;
+              cursor:pointer;font-family:inherit;padding:5px 0 2px;letter-spacing:.3px;transition:color .15s}
+  .expand-btn:hover{color:var(--accent)}
+  /* Реестр фабрик */
+  .sup{width:100%;border-collapse:collapse;margin-top:4px}
+  .sup th{font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:left;
+          padding:8px 8px 6px;border-bottom:1px solid var(--line)}
+  .sup td{padding:5px 8px;border-bottom:1px solid #f0eee7;vertical-align:top}
+  .sup tr:hover td{background:#fbfaf6}
+  .sup input,.sup textarea{width:100%;border:1px solid var(--line);border-radius:7px;padding:6px 8px;font-size:12px;
+        font-family:inherit;background:var(--bg2);outline:none;resize:vertical;transition:border-color .15s, box-shadow .15s}
+  .sup textarea{min-height:34px}
+  .sup input:focus,.sup textarea:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
+  .sup .row-del{border:none;background:none;color:#b6b2a6;cursor:pointer;font-size:12px;padding:4px 6px;border-radius:6px;transition:all .15s}
+  .sup .row-del:hover{color:var(--accent);background:var(--accent-soft)}
+  .sup-link{display:inline-block;margin-top:4px;font-size:11px;color:var(--accent);text-decoration:none;word-break:break-all}
+  .sup-link:hover{text-decoration:underline}
   #loading{text-align:center;color:var(--muted);padding:60px 0;font-size:13px}
   @media (max-width:760px){ .cols{grid-template-columns:1fr} }
 </style>
@@ -119,6 +142,7 @@
     <div class="logo">К</div>
     <h1>КРУПНО<span class="dot">.</span></h1>
     <span class="tag">Живые ферментированные овощи</span>
+    <span class="updated" id="updatedAt"></span>
   </div>
   <div class="sub">Внутри каждого этапа — три секции: новая задача/идея → в процессе → сделано. Перетаскивай задачи, добавляй пункты, закрывай галочкой. Изменения сохраняются в общей базе и видны всем сразу.</div>
 
@@ -154,7 +178,20 @@
     </div>
   </div>
 
-  <div class="foot">Данные доски — в общей базе. Калькулятор — локально, без сохранения.</div>
+  <div class="calc" id="suppliersBox">
+    <div class="calc-head"><h2>Реестр фабрик</h2><span class="note">синхронизируется с общей базой</span></div>
+    <div class="desc">Вписывай ответы фабрик: цены, MOQ, семплы, статус. Правь прямо в таблице — сохранение автоматическое.</div>
+    <table class="sup">
+      <thead><tr><th style="width:20%">Фабрика</th><th style="width:24%">Сайт</th><th style="width:22%">Email</th><th>Ответ (цена / MOQ / семплы / статус)</th><th style="width:30px"></th></tr></thead>
+      <tbody id="supBody"></tbody>
+    </table>
+    <button class="add-stage" style="margin-top:12px;margin-bottom:0" onclick="addSupplier()">+ Добавить фабрику</button>
+  </div>
+
+  <div class="foot">
+    <span>Доска и реестр — в общей базе. Калькулятор — локально, без сохранения.</span>
+    <button onclick="backupBoard()">Скачать копию (JSON)</button>
+  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -171,6 +208,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const boardDoc = db.collection('board').doc('main');
+const suppliersDoc = db.collection('suppliers').doc('main');
+let expandedCols = {};
+let lastUpdated = null;
+let suppliers = [];
+let supTimer = null;
 
 function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
 
@@ -234,7 +276,8 @@ let saveTimer = null;
 function save(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    boardDoc.set({ stages: state }, { merge: true }).catch(e => console.warn('save failed', e));
+    boardDoc.set({ stages: state, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+      .catch(e => console.warn('save failed', e));
   }, 400);
 }
 
@@ -302,7 +345,10 @@ function stageEl(st, i){
       const stg = findStage(sid); const t = stg && findTask(stg, tid);
       if(t && t.status !== status){ t.status = status; save(); render(); }
     };
-    const list = st.tasks.filter(x => x.status === status);
+    const all = st.tasks.filter(x => x.status === status);
+    const key = st.id + '|' + status;
+    const isOpen = !!expandedCols[key];
+    const list = isOpen ? all : all.slice(0, 3);
     const h = document.createElement('div'); h.className='mcol-head';
     h.innerHTML = '<span class="dot-m m-'+(status==='idea'?'idea':status==='progress'?'prog':'done')+'"></span>';
     const t = document.createElement('span'); t.className='t'; t.textContent = label;
@@ -319,6 +365,13 @@ function stageEl(st, i){
       el.dataset.pos = status;
       col.appendChild(el);
     });
+    if(all.length > 3){
+      const btn = document.createElement('button');
+      btn.className = 'expand-btn';
+      btn.textContent = isOpen ? 'свернуть' : '+ ещё ' + (all.length - 3);
+      btn.onclick = () => { expandedCols[key] = !expandedCols[key]; render(); };
+      col.appendChild(btn);
+    }
     cols.appendChild(col);
   });
   sec.appendChild(cols);
@@ -408,10 +461,133 @@ function calc(){
 }
 calc();
 
+/* ---- Реестр фабрик ---- */
+const DEFAULT_SUPPLIERS = [
+  {id:uid(), name:'Hongbang Packaging (Шэньчжэнь)', url:'hongbangpack.com', email:'pm@hongbangpack.com', answer:''},
+  {id:uid(), name:'XINDINGLI / DINGLI PACK (Хуэйчжоу)', url:'mylarbagpackaging.com', email:'fannie@hzdlpack.com', answer:''},
+  {id:uid(), name:'Standupbarrierpouches (Шэньчжэнь)', url:'standupbarrierpouches.com', email:'sales02@standupbarrierpouches.com', answer:''},
+  {id:uid(), name:'Dongguan Better Packaging (Дунгуань)', url:'betterpackingbag.quality.chinacsw.com', email:'', answer:''},
+  {id:uid(), name:'Bestone Packaging (Тяньцзинь)', url:'bestonepackage.com', email:'', answer:''},
+  {id:uid(), name:'Guangdong Nanxin Print & Packaging', url:'nanxinpackaging.com', email:'', answer:''},
+  {id:uid(), name:'Achieve Pack (Гонконг) — клапаны-стикеры', url:'achievepack.com', email:'ryan@achievepack.com', answer:''},
+  {id:uid(), name:'Qiyu Pack (Гуанчжоу)', url:'qiyupack.com', email:'qiyupack@gzqiyu.com', answer:''},
+  {id:uid(), name:'HongHai Package (Пекин)', url:'honghaipacking.com', email:'info@honghaipacking.com', answer:''},
+  {id:uid(), name:'Fenbo Flex Packaging (Шаньтоу)', url:'fenboflexpackaging.com', email:'fenboflexpackaging@gmail.com', answer:''},
+  {id:uid(), name:'GD Fenbo Packaging (Шаньтоу)', url:'gdfenbopackaging.com', email:'gdfenbopackaging@gmail.com', answer:''},
+  {id:uid(), name:'Lanker Pack', url:'lankerpackaging.com', email:'', answer:''},
+  {id:uid(), name:'Dongguan OK Packaging / GDOK', url:'gdokpackaging.com', email:'', answer:''},
+  {id:uid(), name:'Shenzhen Dingqi Pack / TOP PACKING', url:'dingqipack.com', email:'sam@dingqipack.com', answer:''},
+  {id:uid(), name:'TZC Pak (Дунгуань)', url:'tzcpak.com', email:'info@tzcpak.com', answer:''},
+  {id:uid(), name:'Lili Pouches (Дунгуань)', url:'lilipouches.com', email:'', answer:''},
+  {id:uid(), name:'Shenzhen Haixuanwei Packing', url:'haixuanwei.en.alibaba.com', email:'', answer:''},
+  {id:uid(), name:'Wang Pack (РФ)', url:'wangpack.ru', email:'', answer:''},
+  {id:uid(), name:'Group Pack (РФ, Москва)', url:'group-pack.ru', email:'sale@grouppack.ru', answer:''},
+];
+
+function saveSup(){
+  clearTimeout(supTimer);
+  supTimer = setTimeout(() => {
+    suppliersDoc.set({ list: suppliers }, { merge: true }).catch(e => console.warn('sup save failed', e));
+  }, 500);
+}
+
+function renderSuppliers(){
+  const body = document.getElementById('supBody');
+  body.innerHTML = '';
+  suppliers.forEach(s => {
+    const tr = document.createElement('tr');
+    const tName = document.createElement('td');
+    const iName = document.createElement('input'); iName.value = s.name;
+    iName.oninput = () => { s.name = iName.value; saveSup(); };
+    tName.appendChild(iName);
+    const tUrl = document.createElement('td');
+    const iUrl = document.createElement('input'); iUrl.value = s.url; iUrl.placeholder = 'site.com';
+    iUrl.oninput = () => { s.url = iUrl.value; saveSup(); };
+    tUrl.appendChild(iUrl);
+    if(s.url){
+      const a = document.createElement('a'); a.className='sup-link'; a.target='_blank'; a.rel='noopener';
+      a.href = s.url.startsWith('http') ? s.url : 'https://' + s.url;
+      a.textContent = 'открыть ↗';
+      tUrl.appendChild(a);
+    }
+    const tMail = document.createElement('td');
+    const iMail = document.createElement('input'); iMail.value = s.email; iMail.placeholder = 'email';
+    iMail.oninput = () => { s.email = iMail.value; saveSup(); };
+    tMail.appendChild(iMail);
+    const tAns = document.createElement('td');
+    const ta = document.createElement('textarea'); ta.value = s.answer;
+    ta.placeholder = 'цена, MOQ, семплы, статус…';
+    ta.oninput = () => { s.answer = ta.value; saveSup(); };
+    tAns.appendChild(ta);
+    const tDel = document.createElement('td');
+    const del = document.createElement('button'); del.className='row-del'; del.textContent='✕'; del.title='Удалить строку';
+    del.onclick = () => { suppliers = suppliers.filter(x => x.id !== s.id); saveSup(); renderSuppliers(); };
+    tDel.appendChild(del);
+    tr.append(tName, tUrl, tMail, tAns, tDel);
+    body.appendChild(tr);
+  });
+}
+
+function addSupplier(){
+  suppliers.push({id:uid(), name:'', url:'', email:'', answer:''});
+  saveSup(); renderSuppliers();
+}
+
+suppliersDoc.onSnapshot(doc => {
+  if(doc.exists){
+    const remote = doc.data().list || [];
+    if(JSON.stringify(remote) !== JSON.stringify(suppliers)){
+      suppliers = remote;
+      renderSuppliers();
+    }
+  } else {
+    suppliersDoc.set({ list: DEFAULT_SUPPLIERS }, { merge: true })
+      .then(() => { suppliers = JSON.parse(JSON.stringify(DEFAULT_SUPPLIERS)); renderSuppliers(); })
+      .catch(e => console.warn('sup init failed', e));
+  }
+}, err => console.warn('sup snapshot', err));
+
+/* ---- Обновлено / бэкап ---- */
+function renderUpdated(){
+  const el = document.getElementById('updatedAt');
+  if(!lastUpdated){
+    el.textContent = '';
+    return;
+  }
+  const ms = lastUpdated.toMillis ? lastUpdated.toMillis() : (lastUpdated.seconds ? lastUpdated.seconds * 1000 : Date.now());
+  const diff = Date.now() - ms;
+  let txt;
+  if(diff < 60000) txt = 'только что';
+  else if(diff < 3600000) txt = Math.floor(diff / 60000) + ' мин назад';
+  else if(diff < 86400000) txt = Math.floor(diff / 3600000) + ' ч назад';
+  else txt = new Date(ms).toLocaleDateString('ru-RU', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+  el.innerHTML = '<span class="pulse"></span>обновлено ' + txt;
+}
+setInterval(renderUpdated, 30000);
+
+function backupBoard(){
+  Promise.all([boardDoc.get(), suppliersDoc.get()]).then(([b, s]) => {
+    const data = {
+      exportedAt: new Date().toISOString(),
+      board: b.exists ? b.data().stages : null,
+      suppliers: s.exists ? (s.data().list || []) : null
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'krupno-backup-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }).catch(e => alert('Не удалось скачать: ' + e.message));
+}
+
 /* Загрузка из общей базы */
 boardDoc.onSnapshot(doc => {
   if(doc.exists){
     const remote = doc.data().stages;
+    lastUpdated = doc.data().updatedAt || null;
+    renderUpdated();
     if(JSON.stringify(remote) !== JSON.stringify(state)){
       state = remote;
       render();
