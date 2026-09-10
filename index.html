@@ -131,7 +131,16 @@
   .sup-link{display:inline-block;margin-top:4px;font-size:11px;color:var(--accent);text-decoration:none;word-break:break-all}
   .sup-link:hover{text-decoration:underline}
   #loading{text-align:center;color:var(--muted);padding:60px 0;font-size:13px}
-  @media (max-width:760px){ .cols{grid-template-columns:1fr} }
+  .more-hint{display:none}
+  @media (max-width:760px){
+    .cols{display:flex;overflow-x:auto;gap:10px;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .cols::-webkit-scrollbar{display:none}
+    .mcol{flex:0 0 240px}
+    .stage{position:relative}
+    .more-hint{display:flex;position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;
+               background:var(--ink);color:#fff;font-size:14px;align-items:center;justify-content:center;
+               pointer-events:none;opacity:.8;box-shadow:0 2px 8px rgba(25,25,23,.25)}
+  }
 </style>
 </head>
 <body>
@@ -376,6 +385,10 @@ function stageEl(st, i){
     cols.appendChild(col);
   });
   sec.appendChild(cols);
+  const hint = document.createElement('div');
+  hint.className = 'more-hint';
+  hint.textContent = '→';
+  sec.appendChild(hint);
   return sec;
 }
 
