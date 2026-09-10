@@ -27,40 +27,44 @@
   .brand .dot{color:var(--accent)}
   .tag{font-size:10.5px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:var(--olive);
        border:1px solid #d8e0cd;border-radius:20px;padding:4px 12px;background:#f3f6ee}
+  .updated{margin-left:auto;font-size:16px;font-weight:700;color:var(--muted);white-space:nowrap}
+  .updated .pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--done);margin-right:8px;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
   .sub{color:var(--muted);margin:-6px 0 22px;max-width:800px;font-size:12.5px}
+  /* Этап */
   .stage{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:16px;padding:16px 18px 14px;margin-bottom:18px;
-         box-shadow:var(--shadow);transition:box-shadow .2s, border-color .2s;animation:fadein .25s ease}
+         box-shadow:var(--shadow);transition:box-shadow .2s, border-color .2s}
   .stage:hover{box-shadow:var(--shadow-lift);border-color:#ddd9cd}
-  @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
   .stage-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
   .stage-num{font-size:10.5px;font-weight:800;color:#fff;letter-spacing:1.5px;background:var(--ink);border-radius:7px;padding:3px 9px}
   .stage-title{font-size:16px;font-weight:700;letter-spacing:-.2px}
   .stage-count{font-size:11px;color:var(--muted);margin-left:auto}
   .stage-del{border:none;background:none;color:var(--muted);cursor:pointer;font-size:13px;padding:4px 7px;border-radius:7px;transition:all .15s}
   .stage-del:hover{color:var(--accent);background:var(--accent-soft)}
+  /* Колонки */
   .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-  .mcol{border:1.5px dashed #e4e1d6;border-radius:12px;background:var(--bg2);padding:10px;min-height:96px;transition:background .18s, border-color .18s}
-  .mcol.dragover{background:#fbf1e8;border-color:var(--accent);border-style:solid;transform:scale(1.006)}
+  .mcol{border:1.5px dashed #e4e1d6;border-radius:12px;background:var(--bg2);padding:10px;min-height:96px;transition:background .15s, border-color .15s}
+  .mcol.dragover{background:#fbf1e8;border-color:var(--accent);border-style:solid}
   .mcol-head{display:flex;align-items:center;gap:7px;padding-bottom:8px}
   .dot-m{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
   .m-idea{background:var(--idea)} .m-prog{background:var(--prog)} .m-done{background:var(--done)}
   .mcol-head span.t{font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);flex:1}
   .mcol-head .n{font-size:10px;font-weight:700;color:var(--muted);background:#eceae3;border-radius:10px;padding:1px 7px}
   .mcol-head button{border:none;background:none;color:var(--muted);font-size:15px;cursor:pointer;line-height:1;padding:1px 5px;border-radius:6px;transition:all .15s}
-  .mcol-head button:hover{color:var(--accent);background:var(--accent-soft);transform:scale(1.15)}
+  .mcol-head button:hover{color:var(--accent);background:var(--accent-soft)}
+  /* Задача */
   .task{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;
-        cursor:grab;box-shadow:0 1px 2px rgba(25,25,23,.04);transition:transform .15s, box-shadow .15s, border-color .15s;
-        position:relative;animation:fadein .2s ease}
-  .task:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift);border-color:#ddd9cd}
+        cursor:grab;box-shadow:0 1px 2px rgba(25,25,23,.04);transition:box-shadow .15s, border-color .15s;
+        position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none}
   .task:active{cursor:grabbing}
-  .task.dragging{opacity:.45;transform:rotate(1.5deg) scale(.98)}
+  .task.dragging{opacity:.4}
   .mcol .task[data-pos="done"]::before{content:"";position:absolute;left:-1px;top:9px;bottom:9px;width:3px;background:var(--done);border-radius:3px}
   .mcol .task[data-pos="done"]{opacity:.55;filter:saturate(.25);box-shadow:none;border-color:#efede7}
-  .mcol .task[data-pos="done"]:hover{opacity:.85;filter:saturate(.55);transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+  .mcol .task[data-pos="done"]:hover{opacity:.85;filter:saturate(.55)}
   .mcol .task[data-pos="done"] .task-title{color:var(--muted)}
   .mcol .task[data-pos="done"] .items .txt{color:var(--muted)}
   .task-head{display:flex;gap:5px;align-items:flex-start}
-  .task-title{flex:1;font-weight:600;font-size:12.5px;outline:none;padding:2px 3px;word-break:break-word;border-radius:5px;transition:background .15s}
+  .task-title{flex:1;font-weight:600;font-size:12.5px;outline:none;padding:2px 3px;word-break:break-word;border-radius:5px}
   .task-title:hover{background:#faf9f5}
   .task-title:focus{background:#fdf5ec;box-shadow:0 0 0 2px var(--accent-soft)}
   .icon-btn{border:none;background:none;color:#b6b2a6;cursor:pointer;font-size:12px;line-height:1;padding:3px 4px;border-radius:6px;transition:all .15s}
@@ -81,10 +85,13 @@
   .add-item input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
   .add-item button{border:1px solid var(--line);background:var(--card);border-radius:7px;cursor:pointer;color:var(--muted);font-size:12px;padding:0 8px;transition:all .15s}
   .add-item button:hover{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .expand-btn{width:100%;border:none;background:transparent;color:var(--muted);font-size:11.5px;font-weight:600;
+              cursor:pointer;font-family:inherit;padding:5px 0 2px;letter-spacing:.3px}
+  .expand-btn:hover{color:var(--accent)}
   .add-stage{width:100%;border:1.5px dashed #d8d4c6;background:transparent;border-radius:14px;padding:12px;color:var(--muted);
              font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:22px;transition:all .2s;letter-spacing:.3px}
   .add-stage:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
-  /* Калькулятор */
+  /* Калькулятор и реестр */
   .calc{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--olive);border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-top:30px}
   #suppliersBox{border-top-color:var(--gold);margin-top:46px}
   .calc-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
@@ -96,7 +103,8 @@
   .f label{font-size:10.5px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
   .f input{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;font-family:inherit;background:var(--bg2);outline:none;transition:border-color .15s, box-shadow .15s, background .15s}
   .f input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
-  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}  .res{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg2);transition:transform .15s, box-shadow .15s}
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+  .res{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg2);transition:transform .15s, box-shadow .15s}
   .res:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
   .res .v{font-size:19px;font-weight:800;letter-spacing:-.3px}
   .res .l{font-size:11px;color:var(--muted);margin-top:2px}
@@ -105,18 +113,7 @@
   .res.dark{background:var(--ink);border-color:var(--ink)}
   .res.dark .v{color:#fff}
   .res.dark .l{color:#b9b4a6}
-  .foot{margin-top:18px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-  .foot button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--ink);font-size:12px;font-family:inherit;font-weight:600;transition:all .15s}
-  .foot button:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
-  /* Шапка: обновлено */
-  .updated{margin-left:auto;font-size:16px;font-weight:700;color:var(--muted);white-space:nowrap}
-  .updated .pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--done);margin-right:8px;animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  /* Раскрытие секций */
-  .expand-btn{width:100%;border:none;background:transparent;color:var(--muted);font-size:11.5px;font-weight:600;
-              cursor:pointer;font-family:inherit;padding:5px 0 2px;letter-spacing:.3px;transition:color .15s}
-  .expand-btn:hover{color:var(--accent)}
-  /* Реестр фабрик */
+  /* Таблица фабрик */
   .sup{width:100%;border-collapse:collapse;margin-top:4px}
   .sup th{font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:left;
           padding:8px 8px 6px;border-bottom:1px solid var(--line)}
@@ -130,8 +127,11 @@
   .sup .row-del:hover{color:var(--accent);background:var(--accent-soft)}
   .sup-link{display:inline-block;margin-top:4px;font-size:11px;color:var(--accent);text-decoration:none;word-break:break-all}
   .sup-link:hover{text-decoration:underline}
+  .foot{margin-top:18px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .foot button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--ink);font-size:12px;font-family:inherit;font-weight:600;transition:all .15s}
+  .foot button:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
   #loading{text-align:center;color:var(--muted);padding:60px 0;font-size:13px}
-  @media (max-width:760px){ .cols{grid-template-columns:1fr} }
+  @media (max-width:760px){ .cols{grid-template-columns:1fr} .sup{font-size:11px} }
 </style>
 </head>
 <body>
@@ -145,15 +145,15 @@
     <span class="tag">Живые ферментированные овощи</span>
     <span class="updated" id="updatedAt"></span>
   </div>
-  <div class="sub">Внутри каждого этапа — три секции: новая задача/идея → в процессе → сделано. Перетаскивай задачи, добавляй пункты, закрывай галочкой. Изменения сохраняются в общей базе и видны всем сразу.</div>
+  <div class="sub">Внутри каждого этапа — три секции: новая задача/идея → в процессе → сделано. Бери карточку за заголовок и перетаскивай. Заголовки меняются тройным кликом. Изменения — в общей базе, видны всем сразу.</div>
 
   <div id="stages"></div>
 
   <button class="add-stage" onclick="addStage()">+ Добавить этап</button>
 
   <div class="calc">
-    <div class="calc-head"><h2>Калькулятор себестоимости</h2><span class="note">разовый — не сохраняется, обновил страницу и слетело</span></div>
-    <div class="desc">Считает пауч 400–500 мл: овощи + рассол. Меняй любое поле — цифры справа пересчитаются сразу.</div>
+    <div class="calc-head"><h2>Калькулятор себестоимости</h2><span class="note">разовый — не сохраняется</span></div>
+    <div class="desc">Считает пауч 400–500 мл: овощи + рассол. Меняй любое поле — цифры пересчитаются сразу.</div>
     <div class="fields">
       <div class="f"><label>Нетто овощей, г</label><input id="c1" type="number" value="350" oninput="calc()"></div>
       <div class="f"><label>Цена овощей, ₽/кг</label><input id="c2" type="number" value="25" oninput="calc()"></div>
@@ -181,7 +181,7 @@
 
   <div class="calc" id="suppliersBox">
     <div class="calc-head"><h2>Реестр фабрик</h2><span class="note">синхронизируется с общей базой</span></div>
-    <div class="desc">Вписывай ответы фабрик: цены, MOQ, семплы, статус. Правь прямо в таблице — сохранение автоматическое.</div>
+    <div class="desc">Вписывай ответы фабрик: цены, MOQ, семплы, статус. Сохранение автоматическое.</div>
     <table class="sup">
       <thead><tr><th style="width:20%">Фабрика</th><th style="width:24%">Сайт</th><th style="width:22%">Email</th><th>Ответ (цена / MOQ / семплы / статус)</th><th style="width:30px"></th></tr></thead>
       <tbody id="supBody"></tbody>
@@ -210,10 +210,13 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const boardDoc = db.collection('board').doc('main');
 const suppliersDoc = db.collection('suppliers').doc('main');
+
 let expandedCols = {};
 let lastUpdated = null;
 let suppliers = [];
 let supTimer = null;
+let saveTimer = null;
+let state = [];
 
 function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
 
@@ -272,8 +275,11 @@ const DEFAULT = [
   ]},
 ];
 
-let state = [];
-let saveTimer = null;
+/* ---- Сохранение ---- */
+function stampBoard(){
+  boardDoc.set({ updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+    .catch(e => console.warn('stamp failed', e));
+}
 function save(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
@@ -282,8 +288,8 @@ function save(){
   }, 400);
 }
 
+/* ---- Рендер доски ---- */
 function findStage(id){ return state.find(s => s.id === id); }
-function findTask(stage, taskId){ return stage.tasks.find(t => t.id === taskId); }
 
 function render(){
   const box = document.getElementById('stages');
@@ -321,6 +327,63 @@ function makeEditable(el, onSave){
   });
 }
 
+/* ---- Перетаскивание: pointer events (свой, без HTML5 DnD) ---- */
+function isTouch(){ return window.matchMedia('(pointer:coarse)').matches; }
+
+function attachDrag(card, st, t){
+  let ghost = null, dragging = false, startX = 0, startY = 0;
+  card.addEventListener('pointerdown', e => {
+    if(isTouch()) return;
+    if(e.target.closest('input, textarea, button')) return;
+    dragging = false;
+    startX = e.clientX; startY = e.clientY;
+    const move = e2 => {
+      if(!dragging && Math.hypot(e2.clientX - startX, e2.clientY - startY) > 6){
+        dragging = true;
+        card.classList.add('dragging');
+        ghost = card.cloneNode(true);
+        ghost.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;width:' + card.offsetWidth + 'px;opacity:.9;box-shadow:0 12px 30px rgba(0,0,0,.28);border-radius:10px;';
+        document.body.appendChild(ghost);
+      }
+      if(dragging && ghost){
+        ghost.style.left = (e2.clientX - ghost.offsetWidth / 2) + 'px';
+        ghost.style.top = (e2.clientY - 12) + 'px';
+        highlightUnder(e2);
+      }
+    };
+    const up = e3 => {
+      document.removeEventListener('pointermove', move);
+      document.removeEventListener('pointerup', up);
+      document.removeEventListener('pointercancel', up);
+      if(!dragging) return;
+      dragging = false;
+      card.classList.remove('dragging');
+      if(ghost){ ghost.remove(); ghost = null; }
+      clearHighlight();
+      const el = document.elementFromPoint(e3.clientX, e3.clientY);
+      const mcol = el && el.closest('.mcol');
+      if(mcol && mcol.dataset.status && mcol.dataset.status !== t.status){
+        t.status = mcol.dataset.status;
+        save();
+        render();
+      }
+    };
+    document.addEventListener('pointermove', move);
+    document.addEventListener('pointerup', up);
+    document.addEventListener('pointercancel', up);
+  });
+}
+
+function highlightUnder(e){
+  document.querySelectorAll('.mcol').forEach(c => c.classList.remove('dragover'));
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const mcol = el && el.closest('.mcol');
+  if(mcol) mcol.classList.add('dragover');
+}
+function clearHighlight(){
+  document.querySelectorAll('.mcol').forEach(c => c.classList.remove('dragover'));
+}
+
 function stageEl(st, i){
   const sec = document.createElement('div'); sec.className='stage'; sec.dataset.stage=st.id;
   const head = document.createElement('div'); head.className='stage-head';
@@ -338,22 +401,15 @@ function stageEl(st, i){
   const cols = document.createElement('div'); cols.className='cols';
   [['idea','Новая задача/идея'],['progress','В процессе'],['done','Сделано']].forEach(([status, label]) => {
     const col = document.createElement('div'); col.className='mcol'; col.dataset.status=status;
-    col.ondragover = e => { e.preventDefault(); col.classList.add('dragover'); };
-    col.ondragleave = () => col.classList.remove('dragover');
-    col.ondrop = e => {
-      e.preventDefault(); col.classList.remove('dragover');
-      const [sid, tid] = (e.dataTransfer.getData('text/plain')||'').split('|');
-      const stg = findStage(sid); const t = stg && findTask(stg, tid);
-      if(t && t.status !== status){ t.status = status; save(); render(); }
-    };
     const all = st.tasks.filter(x => x.status === status);
     const key = st.id + '|' + status;
     const isOpen = !!expandedCols[key];
     const list = isOpen ? all : all.slice(0, 3);
+
     const h = document.createElement('div'); h.className='mcol-head';
     h.innerHTML = '<span class="dot-m m-'+(status==='idea'?'idea':status==='progress'?'prog':'done')+'"></span>';
     const t = document.createElement('span'); t.className='t'; t.textContent = label;
-    const n = document.createElement('span'); n.className='n'; n.textContent = list.length;
+    const n = document.createElement('span'); n.className='n'; n.textContent = all.length;
     const plus = document.createElement('button'); plus.textContent='+'; plus.title='Добавить задачу';
     plus.onclick = () => {
       const name = prompt('Название задачи:');
@@ -361,6 +417,7 @@ function stageEl(st, i){
     };
     h.append(t, n, plus);
     col.appendChild(h);
+
     list.forEach(task => {
       const el = taskEl(st, task);
       el.dataset.pos = status;
@@ -380,10 +437,9 @@ function stageEl(st, i){
 }
 
 function taskEl(st, t){
-  const card = document.createElement('div'); card.className='task'; card.draggable=true;
+  const card = document.createElement('div'); card.className='task';
   card.dataset.task=t.id;
-  card.ondragstart = e => { e.dataTransfer.setData('text/plain', st.id+'|'+t.id); card.classList.add('dragging'); };
-  card.ondragend = () => card.classList.remove('dragging');
+  attachDrag(card, st, t);
 
   const head = document.createElement('div'); head.className='task-head';
   const title = document.createElement('div'); title.className='task-title'; title.textContent = t.title;
@@ -423,26 +479,14 @@ function addStage(){
   save(); render();
 }
 
-/* Калькулятор (разовый, без сохранения) */
+/* ---- Калькулятор ---- */
 function v(id){ return parseFloat(document.getElementById(id).value) || 0; }
 function fmt(x){ return Math.round(x).toLocaleString('ru-RU'); }
 function calc(){
-  const netto_g = v('c1');        // г овощей нетто
-  const price_kg = v('c2');       // ₽/кг овощей
-  const waste = v('c3');          // % отходов
-  const salt_pct = v('c4');       // % соли
-  const salt_price = v('c5');     // ₽/кг соли
-  const spices = v('c6');         // ₽/пауч
-  const pouch = v('c7');          // ₽/шт
-  const minutes = v('c8');        // мин/пауч
-  const rate = v('c9');           // ₽/час
-  const overhead = v('c10');      // ₽/пауч
-  const logistics = v('c11');     // ₽/пауч
-  const loss = v('c12');          // % потерь
-  const markup_self = v('c13');   // % наценки производителя
-  const markup_retail = v('c14'); // % наценки розницы
-
-  const gross_kg = netto_g / 1000 / (1 - waste / 100);          // кг сырья с отходами
+  const netto_g = v('c1'), price_kg = v('c2'), waste = v('c3'), salt_pct = v('c4'), salt_price = v('c5');
+  const spices = v('c6'), pouch = v('c7'), minutes = v('c8'), rate = v('c9');
+  const overhead = v('c10'), logistics = v('c11'), loss = v('c12'), markup_self = v('c13'), markup_retail = v('c14');
+  const gross_kg = netto_g / 1000 / (1 - waste / 100);
   const veggies = gross_kg * price_kg;
   const salt = (netto_g / 1000) * (salt_pct / 100) * salt_price;
   const raw = veggies + salt + spices;
@@ -453,7 +497,6 @@ function calc(){
   const shelf = wholesale * (1 + markup_retail / 100);
   const margin = wholesale - cost;
   const per_kg = shelf / (netto_g / 1000);
-
   document.getElementById('r-cost').textContent = fmt(cost) + ' ₽';
   document.getElementById('r-wholesale').textContent = fmt(wholesale) + ' ₽';
   document.getElementById('r-shelf').textContent = fmt(shelf) + ' ₽';
@@ -484,11 +527,6 @@ const DEFAULT_SUPPLIERS = [
   {id:uid(), name:'Wang Pack (РФ)', url:'wangpack.ru', email:'', answer:''},
   {id:uid(), name:'Group Pack (РФ, Москва)', url:'group-pack.ru', email:'sale@grouppack.ru', answer:''},
 ];
-
-function stampBoard(){
-  boardDoc.set({ updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
-    .catch(e => console.warn('stamp failed', e));
-}
 
 function saveSup(){
   clearTimeout(supTimer);
@@ -540,27 +578,10 @@ function addSupplier(){
   saveSup(); renderSuppliers();
 }
 
-suppliersDoc.onSnapshot(doc => {
-  if(doc.exists){
-    const remote = doc.data().list || [];
-    if(JSON.stringify(remote) !== JSON.stringify(suppliers)){
-      suppliers = remote;
-      renderSuppliers();
-    }
-  } else {
-    suppliersDoc.set({ list: DEFAULT_SUPPLIERS }, { merge: true })
-      .then(() => { suppliers = JSON.parse(JSON.stringify(DEFAULT_SUPPLIERS)); renderSuppliers(); })
-      .catch(e => console.warn('sup init failed', e));
-  }
-}, err => console.warn('sup snapshot', err));
-
 /* ---- Обновлено / бэкап ---- */
 function renderUpdated(){
   const el = document.getElementById('updatedAt');
-  if(!lastUpdated){
-    el.textContent = '';
-    return;
-  }
+  if(!lastUpdated){ el.textContent = ''; return; }
   const ms = lastUpdated.toMillis ? lastUpdated.toMillis() : (lastUpdated.seconds ? lastUpdated.seconds * 1000 : Date.now());
   const diff = Date.now() - ms;
   let txt;
@@ -589,15 +610,12 @@ function backupBoard(){
   }).catch(e => alert('Не удалось скачать: ' + e.message));
 }
 
-/* Загрузка из общей базы */
+/* ---- Загрузка ---- */
 boardDoc.onSnapshot(doc => {
   if(doc.exists){
     const remote = doc.data().stages;
     lastUpdated = doc.data().updatedAt || null;
-    if(!doc.data().updatedAt){
-      boardDoc.set({ updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
-        .catch(e => console.warn('stamp failed', e));
-    }
+    if(!doc.data().updatedAt) stampBoard();
     renderUpdated();
     if(JSON.stringify(remote) !== JSON.stringify(state)){
       state = remote;
@@ -613,6 +631,20 @@ boardDoc.onSnapshot(doc => {
 }, err => {
   document.getElementById('loading').textContent = 'Нет доступа к базе: ' + (err && err.code ? err.code : 'ошибка') + '. Проверь правила Firestore.';
 });
+
+suppliersDoc.onSnapshot(doc => {
+  if(doc.exists){
+    const remote = doc.data().list || [];
+    if(JSON.stringify(remote) !== JSON.stringify(suppliers)){
+      suppliers = remote;
+      renderSuppliers();
+    }
+  } else {
+    suppliersDoc.set({ list: DEFAULT_SUPPLIERS }, { merge: true })
+      .then(() => { suppliers = JSON.parse(JSON.stringify(DEFAULT_SUPPLIERS)); renderSuppliers(); })
+      .catch(e => console.warn('sup init failed', e));
+  }
+}, err => console.warn('sup snapshot', err));
 </script>
 </body>
 </html>
