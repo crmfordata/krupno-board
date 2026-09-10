@@ -29,9 +29,8 @@
        border:1px solid #d8e0cd;border-radius:20px;padding:4px 12px;background:#f3f6ee}
   .sub{color:var(--muted);margin:-6px 0 22px;max-width:800px;font-size:12.5px}
   .stage{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:16px;padding:16px 18px 14px;margin-bottom:18px;
-         box-shadow:var(--shadow);transition:box-shadow .2s, border-color .2s;animation:fadein .25s ease}
+         box-shadow:var(--shadow);transition:box-shadow .2s, border-color .2s}
   .stage:hover{box-shadow:var(--shadow-lift);border-color:#ddd9cd}
-  @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
   .stage-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
   .stage-num{font-size:10.5px;font-weight:800;color:#fff;letter-spacing:1.5px;background:var(--ink);border-radius:7px;padding:3px 9px}
   .stage-title{font-size:16px;font-weight:700;letter-spacing:-.2px}
@@ -50,7 +49,7 @@
   .mcol-head button:hover{color:var(--accent);background:var(--accent-soft);transform:scale(1.15)}
   .task{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;
         cursor:grab;box-shadow:0 1px 2px rgba(25,25,23,.04);transition:transform .15s, box-shadow .15s, border-color .15s;
-        position:relative;animation:fadein .2s ease}
+        position:relative}
   .task:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift);border-color:#ddd9cd}
   .task:active{cursor:grabbing}
   .task.dragging{opacity:.45;transform:rotate(1.5deg) scale(.98)}
