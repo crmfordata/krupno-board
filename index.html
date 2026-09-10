@@ -485,10 +485,16 @@ const DEFAULT_SUPPLIERS = [
   {id:uid(), name:'Group Pack (РФ, Москва)', url:'group-pack.ru', email:'sale@grouppack.ru', answer:''},
 ];
 
+function stampBoard(){
+  boardDoc.set({ updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+    .catch(e => console.warn('stamp failed', e));
+}
+
 function saveSup(){
   clearTimeout(supTimer);
   supTimer = setTimeout(() => {
     suppliersDoc.set({ list: suppliers }, { merge: true }).catch(e => console.warn('sup save failed', e));
+    stampBoard();
   }, 500);
 }
 
