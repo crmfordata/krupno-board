@@ -71,6 +71,8 @@
   .icon-btn:hover{color:var(--ink);background:#f1efe8}
   .icon-btn.ok:hover{color:var(--done);background:#eef1e7}
   .icon-btn.del:hover{color:var(--accent);background:var(--accent-soft)}
+  .move-btn{display:none}
+  @media (max-width:760px){ .move-btn{display:inline-block} }
   .items{list-style:none;margin-top:6px}
   .items li{display:flex;gap:7px;padding:2.5px 0;align-items:flex-start}
   .cb{width:13px;height:13px;flex:0 0 13px;border:1.5px solid #cfc8b8;border-radius:4px;margin-top:1.5px;cursor:pointer;
@@ -281,11 +283,8 @@ function stampBoard(){
     .catch(e => console.warn('stamp failed', e));
 }
 function save(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    boardDoc.set({ stages: state, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
-      .catch(e => console.warn('save failed', e));
-  }, 400);
+  boardDoc.set({ stages: state, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+    .catch(e => console.warn('save failed', e));
 }
 
 /* ---- Рендер доски ---- */
@@ -412,8 +411,23 @@ function stageEl(st, i){
     const n = document.createElement('span'); n.className='n'; n.textContent = all.length;
     const plus = document.createElement('button'); plus.textContent='+'; plus.title='Добавить задачу';
     plus.onclick = () => {
-      const name = prompt('Название задачи:');
-      if(name && name.trim()){ st.tasks.push({id:uid(), title:name.trim(), status, items:[]}); save(); render(); }
+      const inp = document.createElement('input');
+      inp.placeholder = 'Название задачи… Enter — сохранить';
+      inp.style.cssText = 'width:100%;box-sizing:border-box;border:1px solid var(--accent);border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;outline:none;margin-bottom:8px;background:#fff';
+      col.insertBefore(inp, h.nextSibling);
+      inp.focus();
+      let done = false;
+      const commit = () => {
+        if(done) return; done = true;
+        const name = inp.value.trim();
+        if(inp.isConnected) inp.remove();
+        if(name){ st.tasks.push({id:uid(), title:name, status, items:[]}); save(); render(); }
+      };
+      inp.onkeydown = e => {
+        if(e.key === 'Enter') commit();
+        if(e.key === 'Escape'){ done = true; if(inp.isConnected) inp.remove(); }
+      };
+      inp.onblur = () => setTimeout(commit, 150);
     };
     h.append(t, n, plus);
     col.appendChild(h);
@@ -445,6 +459,17 @@ function taskEl(st, t){
   const title = document.createElement('div'); title.className='task-title'; title.textContent = t.title;
   title.title = 'Тройной клик — переименовать';
   makeEditable(title, v => { t.title = v; save(); render(); });
+  const ORDER = ['idea','progress','done'];
+  if(t.status !== 'idea'){
+    const ml = document.createElement('button'); ml.className='icon-btn move-btn'; ml.textContent='←'; ml.title='Левее';
+    ml.onclick = e => { e.stopPropagation(); t.status = ORDER[ORDER.indexOf(t.status)-1]; save(); render(); };
+    head.appendChild(ml);
+  }
+  if(t.status !== 'done'){
+    const mr = document.createElement('button'); mr.className='icon-btn move-btn'; mr.textContent='→'; mr.title='Правее';
+    mr.onclick = e => { e.stopPropagation(); t.status = ORDER[ORDER.indexOf(t.status)+1]; save(); render(); };
+    head.appendChild(mr);
+  }
   const ok = document.createElement('button'); ok.className='icon-btn ok'; ok.textContent='✓'; ok.title='В сделано';
   ok.onclick = e => { e.stopPropagation(); t.status='done'; save(); render(); };
   const del = document.createElement('button'); del.className='icon-btn del'; del.textContent='✕'; del.title='Удалить';
@@ -472,11 +497,29 @@ function taskEl(st, t){
   return card;
 }
 
-function addStage(){
-  const name = prompt('Название этапа:');
-  if(!name || !name.trim()) return;
-  state.push({id:uid(), title:name.trim(), tasks:[]});
-  save(); render();
+function addStage(btn){
+  if(btn && btn.classList.contains('editing')) return;
+  const button = btn || document.querySelector('.add-stage');
+  button.classList.add('editing');
+  const inp = document.createElement('input');
+  inp.placeholder = 'Название этапа… Enter — сохранить';
+  inp.style.cssText = 'width:100%;box-sizing:border-box;border:1.5px dashed var(--accent);border-radius:12px;padding:10px 12px;font-size:13px;font-family:inherit;outline:none;background:#fff';
+  button.textContent = '';
+  button.appendChild(inp);
+  inp.focus();
+  let done = false;
+  const commit = () => {
+    if(done) return; done = true;
+    const name = inp.value.trim();
+    button.classList.remove('editing');
+    button.textContent = '+ Добавить этап';
+    if(name){ state.push({id:uid(), title:name, tasks:[]}); save(); render(); }
+  };
+  inp.onkeydown = e => {
+    if(e.key === 'Enter') commit();
+    if(e.key === 'Escape'){ done = true; button.classList.remove('editing'); button.textContent = '+ Добавить этап'; }
+  };
+  inp.onblur = () => setTimeout(commit, 150);
 }
 
 /* ---- Калькулятор ---- */
