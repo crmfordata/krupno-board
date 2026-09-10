@@ -67,6 +67,8 @@
   .icon-btn:hover{color:var(--ink);background:#f1efe8}
   .icon-btn.ok:hover{color:var(--done);background:#eef1e7}
   .icon-btn.del:hover{color:var(--accent);background:var(--accent-soft)}
+  .move-btn{display:none}
+  @media (max-width:760px){ .move-btn{display:inline-block} }
   .items{list-style:none;margin-top:6px}
   .items li{display:flex;gap:7px;padding:2.5px 0;align-items:flex-start}
   .cb{width:13px;height:13px;flex:0 0 13px;border:1.5px solid #cfc8b8;border-radius:4px;margin-top:1.5px;cursor:pointer;
@@ -135,7 +137,7 @@
   @media (max-width:760px){
     .cols{display:flex;overflow-x:auto;gap:10px;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
     .cols::-webkit-scrollbar{display:none}
-    .mcol{flex:0 0 240px}
+    .mcol{flex:0 0 44%}
     .stage{position:relative}
     .more-hint{display:flex;position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;
                background:var(--ink);color:#fff;font-size:14px;align-items:center;justify-content:center;
@@ -393,7 +395,9 @@ function stageEl(st, i){
 }
 
 function taskEl(st, t){
-  const card = document.createElement('div'); card.className='task'; card.draggable=true;
+  const isMobile = window.matchMedia('(max-width:760px)').matches;
+  const ORDER = ['idea','progress','done'];
+  const card = document.createElement('div'); card.className='task'; card.draggable = !isMobile;
   card.dataset.task=t.id;
   card.ondragstart = e => { e.dataTransfer.setData('text/plain', st.id+'|'+t.id); card.classList.add('dragging'); };
   card.ondragend = () => card.classList.remove('dragging');
@@ -402,6 +406,16 @@ function taskEl(st, t){
   const title = document.createElement('div'); title.className='task-title'; title.textContent = t.title;
   title.title = 'Тройной клик — переименовать';
   makeEditable(title, v => { t.title = v; save(); render(); });
+  if(t.status !== 'idea'){
+    const ml = document.createElement('button'); ml.className='icon-btn move-btn'; ml.textContent='←'; ml.title='Левее';
+    ml.onclick = e => { e.stopPropagation(); t.status = ORDER[ORDER.indexOf(t.status)-1]; save(); render(); };
+    head.appendChild(ml);
+  }
+  if(t.status !== 'done'){
+    const mr = document.createElement('button'); mr.className='icon-btn move-btn'; mr.textContent='→'; mr.title='Правее';
+    mr.onclick = e => { e.stopPropagation(); t.status = ORDER[ORDER.indexOf(t.status)+1]; save(); render(); };
+    head.appendChild(mr);
+  }
   const ok = document.createElement('button'); ok.className='icon-btn ok'; ok.textContent='✓'; ok.title='В сделано';
   ok.onclick = e => { e.stopPropagation(); t.status='done'; save(); render(); };
   const del = document.createElement('button'); del.className='icon-btn del'; del.textContent='✕'; del.title='Удалить';
