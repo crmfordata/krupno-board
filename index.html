@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КРУПНО — доска</title>
+<style>
+  :root{
+    --bg:#faf7f1; --bg2:#f4efe4; --card:#ffffff; --ink:#201c17; --muted:#8b8578;
+    --line:#e7e0d3; --accent:#c4552d; --accent-soft:#fbece5; --olive:#5a6b46;
+    --gold:#b98a3e; --idea:#c4552d; --prog:#b98a3e; --done:#5a6b46;
+    --shadow:0 1px 3px rgba(60,45,25,.06), 0 4px 14px rgba(60,45,25,.05);
+    --shadow-lift:0 3px 6px rgba(60,45,25,.08), 0 10px 24px rgba(60,45,25,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+    background-attachment:fixed; color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+    font-size:13px; line-height:1.4; padding:34px 24px 56px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1040px}
+  /* Логин */
+  #loginScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--bg),var(--bg2))}
+  .login-card{width:340px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px 28px;box-shadow:var(--shadow-lift)}
+  .login-card .logo-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .login-card .logo{width:36px;height:36px;border-radius:10px;background:var(--ink);color:var(--bg);
+        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+  .login-card h1{font-size:24px;font-weight:800;letter-spacing:4px}
+  .login-card h1 .dot{color:var(--accent)}
+  .login-card .hint{color:var(--muted);font-size:12px;margin-bottom:20px}
+  .login-card label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
+  .login-card input{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;background:var(--bg);transition:border-color .15s, box-shadow .15s}
+  .login-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .login-card button{width:100%;margin-top:20px;background:var(--ink);color:var(--bg);border:none;border-radius:10px;
+        padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:opacity .15s}
+  .login-card button:hover{opacity:.85}
+  .login-card .err{color:var(--accent);font-size:12px;margin-top:12px;min-height:16px}
+  /* Шапка */
+  .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .logo{width:38px;height:38px;border-radius:11px;background:var(--ink);color:var(--bg);
+        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;letter-spacing:1px}
+  .brand h1{font-size:27px;font-weight:800;letter-spacing:5px}
+  .brand .dot{color:var(--accent)}
+  .tag{font-size:10.5px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:var(--olive);
+       border:1px solid #cdd8c0;border-radius:20px;padding:4px 12px;background:#eef1e7}
+  .who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+  .who b{color:var(--ink);font-weight:600}
+  .who button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 12px;cursor:pointer;
+              color:var(--muted);font-size:12px;font-family:inherit;transition:all .15s}
+  .who button:hover{color:var(--accent);border-color:var(--accent)}
+  .sub{color:var(--muted);margin:-8px 0 22px;max-width:780px;font-size:12.5px}
+  /* Этап */
+  .stage{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;margin-bottom:18px;
+         box-shadow:var(--shadow);transition:box-shadow .2s, border-color .2s;animation:fadein .25s ease}
+  .stage:hover{box-shadow:var(--shadow-lift);border-color:#ddd3c0}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .stage-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .stage-num{font-size:10.5px;font-weight:800;color:var(--bg);letter-spacing:1.5px;background:var(--ink);border-radius:6px;padding:3px 8px}
+  .stage-title{font-size:16px;font-weight:700;letter-spacing:-.2px}
+  .stage-count{font-size:11px;color:var(--muted);margin-left:auto}
+  .stage-del{border:none;background:none;color:var(--muted);cursor:pointer;font-size:13px;padding:4px 7px;border-radius:7px;transition:all .15s}
+  .stage-del:hover{color:var(--accent);background:var(--accent-soft)}
+  .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .mcol{border:1.5px dashed var(--line);border-radius:12px;background:var(--bg2);padding:10px;min-height:96px;transition:background .18s, border-color .18s}
+  .mcol.dragover{background:#f3ead9;border-color:var(--accent);border-style:solid;transform:scale(1.008)}
+  .mcol-head{display:flex;align-items:center;gap:7px;padding-bottom:8px}
+  .dot-m{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+  .m-idea{background:var(--idea)} .m-prog{background:var(--prog)} .m-done{background:var(--done)}
+  .mcol-head span.t{font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);flex:1}
+  .mcol-head .n{font-size:10px;font-weight:700;color:var(--muted);background:#ede7d8;border-radius:10px;padding:1px 7px}
+  .mcol-head button{border:none;background:none;color:var(--muted);font-size:15px;cursor:pointer;line-height:1;padding:1px 5px;border-radius:6px;transition:all .15s}
+  .mcol-head button:hover{color:var(--accent);background:var(--accent-soft);transform:scale(1.15)}
+  .task{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;
+        cursor:grab;box-shadow:0 1px 2px rgba(60,45,25,.04);transition:transform .15s, box-shadow .15s, border-color .15s;
+        position:relative;animation:fadein .2s ease}
+  .task:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift);border-color:#ddd3c0}
+  .task:active{cursor:grabbing}
+  .task.dragging{opacity:.45;transform:rotate(1.5deg) scale(.98)}
+  .mcol .task[data-pos="done"]::before{content:"";position:absolute;left:-1px;top:9px;bottom:9px;width:3px;background:var(--done);border-radius:3px}
+  .mcol .task[data-pos="done"]{opacity:.55;filter:saturate(.25);box-shadow:none;border-color:#efe8da}
+  .mcol .task[data-pos="done"]:hover{opacity:.85;filter:saturate(.55);transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+  .mcol .task[data-pos="done"] .task-title{color:var(--muted)}
+  .mcol .task[data-pos="done"] .items .txt{color:var(--muted)}
+  .task-head{display:flex;gap:5px;align-items:flex-start}
+  .task-title{flex:1;font-weight:600;font-size:12.5px;outline:none;padding:2px 3px;word-break:break-word;border-radius:5px;transition:background .15s}
+  .task-title:hover{background:#faf6ee}
+  .task-title:focus{background:#fdf5ec;box-shadow:0 0 0 2px var(--accent-soft)}
+  .icon-btn{border:none;background:none;color:#b9b2a2;cursor:pointer;font-size:12px;line-height:1;padding:3px 4px;border-radius:6px;transition:all .15s}
+  .icon-btn:hover{color:var(--ink);background:#f1ede3}
+  .icon-btn.ok:hover{color:var(--done);background:#eef1e7}
+  .icon-btn.del:hover{color:var(--accent);background:var(--accent-soft)}
+  .items{list-style:none;margin-top:6px}
+  .items li{display:flex;gap:7px;padding:2.5px 0;align-items:flex-start}
+  .cb{width:13px;height:13px;flex:0 0 13px;border:1.5px solid #cfc8b8;border-radius:4px;margin-top:1.5px;cursor:pointer;
+      font-size:8.5px;line-height:10px;text-align:center;color:transparent;background:var(--card);transition:all .15s}
+  .cb:hover{border-color:var(--done)}
+  li.done .cb{border-color:var(--done);background:var(--done);color:#fff}
+  li.done .txt{color:var(--muted);text-decoration:line-through}
+  .txt{flex:1;font-size:11.5px}
+  .add-item{display:flex;gap:5px;margin-top:7px}
+  .add-item input{flex:1;border:1px solid var(--line);border-radius:7px;padding:4.5px 8px;font-size:11px;background:var(--bg);outline:none;font-family:inherit;min-width:0;transition:border-color .15s, box-shadow .15s}
+  .add-item input::placeholder{color:#b9b2a2}
+  .add-item input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .add-item button{border:1px solid var(--line);background:var(--card);border-radius:7px;cursor:pointer;color:var(--muted);font-size:12px;padding:0 8px;transition:all .15s}
+  .add-item button:hover{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .add-stage{width:100%;border:1.5px dashed #cfc8b8;background:transparent;border-radius:14px;padding:12px;color:var(--muted);
+             font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:22px;transition:all .2s;letter-spacing:.3px}
+  .add-stage:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+  .eco{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+  .eco h2{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .kpi{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg2);transition:transform .15s, box-shadow .15s}
+  .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .kpi .v{font-size:17px;font-weight:800;letter-spacing:-.3px}
+  .kpi .l{font-size:11px;color:var(--muted);margin-top:2px}
+  .foot{margin-top:16px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+  #board{display:none}
+  #loading{text-align:center;color:var(--muted);padding:60px 0;font-size:13px}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" style="display:none">
+  <div class="login-card">
+    <div class="logo-row"><div class="logo">К</div><h1>КРУПНО<span class="dot">.</span></h1></div>
+    <div class="hint">Доска запуска. Вход для своих.</div>
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@mail.ru" autocomplete="email">
+    <label>Пароль</label>
+    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button id="loginBtn">Войти</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="loading">Загрузка доски…</div>
+
+<div id="board">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">К</div>
+      <h1>КРУПНО<span class="dot">.</span></h1>
+      <span class="tag">Живые ферментированные овощи</span>
+      <span class="who">вошёл как <b id="whoEmail"></b> <button id="logoutBtn">Выйти</button></span>
+    </div>
+    <div class="sub">Внутри каждого этапа — три секции: новая задача/идея → в процессе → сделано. Перетаскивай задачи, добавляй пункты, закрывай галочкой. Изменения видны всем участникам сразу.</div>
+
+    <div id="stages"></div>
+
+    <button class="add-stage" onclick="addStage()">+ Добавить этап</button>
+
+    <div class="eco">
+      <h2>Экономика</h2>
+      <div class="grid">
+        <div class="kpi"><div class="v">249–349 ₽</div><div class="l">целевая полка за пауч 400–500 мл</div></div>
+        <div class="kpi"><div class="v">~700–900 ₽/кг</div><div class="l">нетто овощей — премиум ×3–4 к массе</div></div>
+        <div class="kpi"><div class="v">150–200 ₽</div><div class="l">отпуск производителя</div></div>
+        <div class="kpi"><div class="v">9–30 ₽</div><div class="l">пауч под ключ с клапаном, за шт</div></div>
+        <div class="kpi"><div class="v">60–90 дн</div><div class="l">срок годности при +2…+6°C</div></div>
+        <div class="kpi"><div class="v">1 цех</div><div class="l">партнёр: ТУ и сертификаты — у них</div></div>
+      </div>
+    </div>
+    <div class="foot">Финальная юнит-экономика — после цены цеха и пауча.</div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAzWTO7hHKeZ2SwBxoyzZOCRB8CKepcP3w",
+  authDomain: "sole-4113c.firebaseapp.com",
+  projectId: "sole-4113c",
+  storageBucket: "sole-4113c.firebasestorage.app",
+  messagingSenderId: "1073171502772",
+  appId: "1:1073171502772:web:ee435eb8eeed4234cda9e1"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const boardDoc = db.collection('board').doc('main');
+
+function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+
+const DEFAULT = [
+  {id:uid(), title:'Идея и гипотеза', tasks:[
+    {id:uid(), title:'Рынок солений РФ ~40 млрд ₽ — заморожен (уксус, пастеризация)', status:'done', items:[{id:uid(),text:'Подтверждено анализом',done:true}]},
+    {id:uid(), title:'УТП: «Не соленья. Живые овощи с лактобактериями»', status:'done', items:[]},
+    {id:uid(), title:'Крупная нарезка = хруст + витамины + виральность', status:'done', items:[]},
+    {id:uid(), title:'Оценить ёмкость сегмента ЗОЖ-премиум по городам', status:'idea', items:[]},
+  ]},
+  {id:uid(), title:'Валидация зарубежным рынком', tasks:[
+    {id:uid(), title:'Cleveland Kitchen: пауч 16 oz, Walmart/Target, $19M Series A, рост 100%/год', status:'done', items:[]},
+    {id:uid(), title:'Wildbrine (Costco), Bubbies (Costco 2026), Vadasz (Waitrose/Tesco)', status:'done', items:[]},
+    {id:uid(), title:'Farmhouse Culture закрылась → холодовая цепь обязательна', status:'done', items:[]},
+    {id:uid(), title:'Кимчи-формат как драйвер (+8,5% CAGR) — SKU 6', status:'idea', items:[]},
+  ]},
+  {id:uid(), title:'Продукт: капуста и свёкла', tasks:[
+    {id:uid(), title:'Матрица: капуста «ЖИВАЯ» + свёкла «Борщевая», 2 SKU', status:'done', items:[
+      {id:uid(),text:'Нарезка 3–5 см, соль 2–2,2%, без уксуса/сахара',done:true}]},
+    {id:uid(), title:'Составы для этикетки зафиксированы', status:'done', items:[]},
+    {id:uid(), title:'13 вопросов тёте: рецепт, соль по весу, сроки, выход', status:'progress', items:[
+      {id:uid(),text:'Созвониться на этой неделе',done:false}]},
+    {id:uid(), title:'Морковь с чесноком — SKU 3 (после старта)', status:'idea', items:[]},
+    {id:uid(), title:'Микс «Русский» — SKU 4 (после старта)', status:'idea', items:[]},
+    {id:uid(), title:'Огурцы живые без уксуса — SKU 5 (после старта)', status:'idea', items:[]},
+  ]},
+  {id:uid(), title:'Упаковка: дой-пак + клапан', tasks:[
+    {id:uid(), title:'Формат выбран: дой-пак 400–500 мл + зип + клапан с гидрофобной мембраной', status:'done', items:[]},
+    {id:uid(), title:'Наука: без клапана давление 0,115→0,600 атм за 4 недели', status:'done', items:[]},
+    {id:uid(), title:'Письма фабрикам отправлены (EN + CN), 17 фабрик Китая + РФ', status:'done', items:[]},
+    {id:uid(), title:'Разбор ответов фабрик: семплы, MOQ, цены', status:'progress', items:[]},
+    {id:uid(), title:'Пилот: 500–1 000 паучей, цифровая печать', status:'progress', items:[]},
+    {id:uid(), title:'Газопроницаемая плёнка вместо клапана (этап 2)', status:'idea', items:[]},
+  ]},
+  {id:uid(), title:'Рецепт и домашний тест', tasks:[
+    {id:uid(), title:'Купить pH-метр (500–1 500 ₽)', status:'idea', items:[]},
+    {id:uid(), title:'Тест: 2+2 кг, нарезка 3–5 см, замеры pH дни 0/3/5/7/10', status:'progress', items:[]},
+    {id:uid(), title:'Цели: капуста pH ≤ 3,9, свёкла pH ≤ 4,2 + хруст', status:'progress', items:[]},
+    {id:uid(), title:'Тест в зип-пакете: 48 ч при +20°C + 2 недели в холоде', status:'progress', items:[]},
+  ]},
+  {id:uid(), title:'Партнёрское производство', tasks:[
+    {id:uid(), title:'Решение: ТУ, HACCP и декларации на стороне цеха — своя сертификация не нужна', status:'done', items:[]},
+    {id:uid(), title:'Согласовать крупную нарезку и холодную фасовку +4°C', status:'idea', items:[]},
+    {id:uid(), title:'Пилот в цеху: 500–1 000 паучей, 2 SKU, дегазация', status:'idea', items:[]},
+  ]},
+  {id:uid(), title:'Гипотеза и питч во ВкусВилл', tasks:[
+    {id:uid(), title:'Дегустации в HoReCa и крафт-магазинах', status:'idea', items:[]},
+    {id:uid(), title:'Питч: прецеденты + живой продукт + свободная ниша', status:'idea', items:[]},
+    {id:uid(), title:'Тест на 30–50 магазинах, холодная полка', status:'idea', items:[]},
+    {id:uid(), title:'Собственный интернет-магазин, предзаказы', status:'idea', items:[]},
+  ]},
+  {id:uid(), title:'Тест на полке и масштаб', tasks:[
+    {id:uid(), title:'Метрики: sell-through, повторные покупки, отзывы', status:'idea', items:[]},
+    {id:uid(), title:'Серия 5 000+ паучей из Китая (цена пакета −28%)', status:'idea', items:[]},
+    {id:uid(), title:'Каналы: маркетплейсы, крафт, другие сети', status:'idea', items:[]},
+  ]},
+];
+
+let state = [];
+let saveTimer = null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    boardDoc.set({ stages: state }, { merge: true }).catch(e => console.warn('save failed', e));
+  }, 400);
+}
+
+function findStage(id){ return state.find(s => s.id === id); }
+function findTask(stage, taskId){ return stage.tasks.find(t => t.id === taskId); }
+
+function render(){
+  const box = document.getElementById('stages');
+  box.innerHTML = '';
+  state.forEach((st, i) => box.appendChild(stageEl(st, i)));
+}
+
+function stageEl(st, i){
+  const sec = document.createElement('div'); sec.className='stage'; sec.dataset.stage=st.id;
+  const head = document.createElement('div'); head.className='stage-head';
+  const num = document.createElement('span'); num.className='stage-num';
+  num.textContent = String(i+1).padStart(2,'0');
+  const title = document.createElement('span'); title.className='stage-title'; title.textContent = st.title;
+  title.onblur = () => { st.title = title.textContent.trim() || st.title; save(); render(); };
+  const cnt = document.createElement('span'); cnt.className='stage-count'; cnt.textContent = st.tasks.length + ' задач';
+  const del = document.createElement('button'); del.className='stage-del'; del.textContent='✕'; del.title='Удалить этап';
+  del.onclick = () => { state = state.filter(x => x.id !== st.id); save(); render(); };
+  head.append(num, title, cnt, del);
+  sec.appendChild(head);
+
+  const cols = document.createElement('div'); cols.className='cols';
+  [['idea','Новая задача/идея'],['progress','В процессе'],['done','Сделано']].forEach(([status, label]) => {
+    const col = document.createElement('div'); col.className='mcol'; col.dataset.status=status;
+    col.ondragover = e => { e.preventDefault(); col.classList.add('dragover'); };
+    col.ondragleave = () => col.classList.remove('dragover');
+    col.ondrop = e => {
+      e.preventDefault(); col.classList.remove('dragover');
+      const [sid, tid] = (e.dataTransfer.getData('text/plain')||'').split('|');
+      const stg = findStage(sid); const t = stg && findTask(stg, tid);
+      if(t && t.status !== status){ t.status = status; save(); render(); }
+    };
+    const list = st.tasks.filter(x => x.status === status);
+    const h = document.createElement('div'); h.className='mcol-head';
+    h.innerHTML = '<span class="dot-m m-'+(status==='idea'?'idea':status==='progress'?'prog':'done')+'"></span>';
+    const t = document.createElement('span'); t.className='t'; t.textContent = label;
+    const n = document.createElement('span'); n.className='n'; n.textContent = list.length;
+    const plus = document.createElement('button'); plus.textContent='+'; plus.title='Добавить задачу';
+    plus.onclick = () => {
+      const name = prompt('Название задачи:');
+      if(name && name.trim()){ st.tasks.push({id:uid(), title:name.trim(), status, items:[]}); save(); render(); }
+    };
+    h.append(t, n, plus);
+    col.appendChild(h);
+    list.forEach(task => {
+      const el = taskEl(st, task);
+      el.dataset.pos = status;
+      col.appendChild(el);
+    });
+    cols.appendChild(col);
+  });
+  sec.appendChild(cols);
+  return sec;
+}
+
+function taskEl(st, t){
+  const card = document.createElement('div'); card.className='task'; card.draggable=true;
+  card.dataset.task=t.id;
+  card.ondragstart = e => { e.dataTransfer.setData('text/plain', st.id+'|'+t.id); card.classList.add('dragging'); };
+  card.ondragend = () => card.classList.remove('dragging');
+
+  const head = document.createElement('div'); head.className='task-head';
+  const title = document.createElement('div'); title.className='task-title'; title.textContent = t.title;
+  title.onblur = () => { t.title = title.textContent.trim() || t.title; save(); render(); };
+  const ok = document.createElement('button'); ok.className='icon-btn ok'; ok.textContent='✓'; ok.title='В сделано';
+  ok.onclick = e => { e.stopPropagation(); t.status='done'; save(); render(); };
+  const del = document.createElement('button'); del.className='icon-btn del'; del.textContent='✕'; del.title='Удалить';
+  del.onclick = e => { e.stopPropagation(); st.tasks = st.tasks.filter(x => x.id !== t.id); save(); render(); };
+  head.append(title, ok, del);
+  card.appendChild(head);
+
+  const ul = document.createElement('ul'); ul.className='items';
+  t.items.forEach(it => {
+    const li = document.createElement('li'); if(it.done) li.className='done';
+    const cb = document.createElement('span'); cb.className='cb'; cb.textContent='✓';
+    cb.onclick = () => { it.done = !it.done; save(); render(); };
+    const txt = document.createElement('span'); txt.className='txt'; txt.textContent = it.text;
+    li.append(cb, txt); ul.appendChild(li);
+  });
+  card.appendChild(ul);
+
+  const row = document.createElement('div'); row.className='add-item';
+  const inp = document.createElement('input'); inp.placeholder='+ пункт…';
+  const btn = document.createElement('button'); btn.textContent='+';
+  const add = () => { const v = inp.value.trim(); if(!v) return; t.items.push({id:uid(), text:v, done:false}); save(); render(); };
+  btn.onclick = add; inp.onkeydown = e => { if(e.key==='Enter') add(); };
+  row.append(inp, btn);
+  card.appendChild(row);
+  return card;
+}
+
+function addStage(){
+  const name = prompt('Название этапа:');
+  if(!name || !name.trim()) return;
+  state.push({id:uid(), title:name.trim(), tasks:[]});
+  save(); render();
+}
+
+/* ---- Firebase ---- */
+let unsub = null;
+
+function attachBoard(){
+  if(unsub) unsub();
+  document.getElementById('board').style.display = 'block';
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('whoEmail').textContent = auth.currentUser ? auth.currentUser.email : '';
+  unsub = boardDoc.onSnapshot(doc => {
+    if(doc.exists){
+      const remote = doc.data().stages;
+      if(JSON.stringify(remote) !== JSON.stringify(state)){
+        state = remote;
+        render();
+      }
+    } else {
+      boardDoc.set({ stages: DEFAULT }, { merge: true })
+        .then(() => { state = JSON.parse(JSON.stringify(DEFAULT)); render(); })
+        .catch(e => console.warn('init failed', e));
+    }
+  }, err => {
+    console.warn('snapshot error', err);
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').textContent = 'Нет доступа к базе: ' + (err && err.code ? err.code : 'ошибка');
+  });
+}
+
+const loginScreen = document.getElementById('loginScreen');
+document.getElementById('loginBtn').onclick = doLogin;
+function doLogin(){
+  const em = document.getElementById('email').value.trim();
+  const pw = document.getElementById('password').value;
+  const err = document.getElementById('loginErr');
+  err.textContent = '';
+  if(!em || !pw){ err.textContent = 'Введи email и пароль'; return; }
+  document.getElementById('loginBtn').disabled = true;
+  auth.signInWithEmailAndPassword(em, pw)
+    .catch(e => {
+      err.textContent = mapError(e.code);
+      document.getElementById('loginBtn').disabled = false;
+    });
+}
+function mapError(code){
+  if(code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') return 'Неверный email или пароль';
+  if(code === 'auth/unauthorized-domain') return 'Домен не разрешён — добавь его в Firebase (Authorized domains)';
+  if(code === 'auth/too-many-requests') return 'Слишком много попыток, подожди';
+  return 'Ошибка входа: ' + code;
+}
+document.getElementById('logoutBtn').onclick = () => auth.signOut();
+
+auth.onAuthStateChanged(user => {
+  if(user){
+    loginScreen.style.display = 'none';
+    attachBoard();
+  } else {
+    if(unsub){ unsub(); unsub = null; }
+    document.getElementById('board').style.display = 'none';
+    document.getElementById('loading').style.display = 'none';
+    loginScreen.style.display = 'flex';
+    document.getElementById('password').value = '';
+    document.getElementById('loginBtn').disabled = false;
+  }
+});
+</script>
+</body>
+</html>
