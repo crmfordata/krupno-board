@@ -6,65 +6,65 @@
 <title>КРУПНО — доска</title>
 <style>
   :root{
-    --bg:#faf7f1; --bg2:#f4efe4; --card:#ffffff; --ink:#201c17; --muted:#8b8578;
-    --line:#e7e0d3; --accent:#c4552d; --accent-soft:#fbece5; --olive:#5a6b46;
+    --bg:#ffffff; --bg2:#f7f7f4; --card:#ffffff; --ink:#191917; --muted:#7d7a70;
+    --line:#e9e7e0; --accent:#c4552d; --accent-soft:#fbece5; --olive:#5a6b46;
     --gold:#b98a3e; --idea:#c4552d; --prog:#b98a3e; --done:#5a6b46;
-    --shadow:0 1px 3px rgba(60,45,25,.06), 0 4px 14px rgba(60,45,25,.05);
-    --shadow-lift:0 3px 6px rgba(60,45,25,.08), 0 10px 24px rgba(60,45,25,.08);
+    --shadow:0 1px 2px rgba(25,25,23,.04), 0 4px 16px rgba(25,25,23,.05);
+    --shadow-lift:0 4px 8px rgba(25,25,23,.06), 0 12px 28px rgba(25,25,23,.09);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{
-    background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
-    background-attachment:fixed; color:var(--ink);
+    background:var(--bg); color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
-    font-size:13px; line-height:1.4; padding:34px 24px 56px; -webkit-font-smoothing:antialiased;
+    font-size:13px; line-height:1.45; padding:34px 24px 64px; -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1040px}
-  .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
-  .logo{width:38px;height:38px;border-radius:11px;background:var(--ink);color:var(--bg);
-        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;letter-spacing:1px}
+  .wrap{max-width:1060px}
+  .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .logo{width:40px;height:40px;border-radius:12px;background:var(--ink);color:#fff;
+        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;letter-spacing:1px;
+        box-shadow:0 2px 6px rgba(25,25,23,.15)}
   .brand h1{font-size:27px;font-weight:800;letter-spacing:5px}
   .brand .dot{color:var(--accent)}
   .tag{font-size:10.5px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:var(--olive);
-       border:1px solid #cdd8c0;border-radius:20px;padding:4px 12px;background:#eef1e7}
-  .sub{color:var(--muted);margin:-8px 0 22px;max-width:780px;font-size:12.5px}
+       border:1px solid #d8e0cd;border-radius:20px;padding:4px 12px;background:#f3f6ee}
+  .sub{color:var(--muted);margin:-6px 0 22px;max-width:800px;font-size:12.5px}
   .stage{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;margin-bottom:18px;
          box-shadow:var(--shadow);transition:box-shadow .2s, border-color .2s;animation:fadein .25s ease}
-  .stage:hover{box-shadow:var(--shadow-lift);border-color:#ddd3c0}
+  .stage:hover{box-shadow:var(--shadow-lift);border-color:#ddd9cd}
   @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
   .stage-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .stage-num{font-size:10.5px;font-weight:800;color:var(--bg);letter-spacing:1.5px;background:var(--ink);border-radius:6px;padding:3px 8px}
+  .stage-num{font-size:10.5px;font-weight:800;color:#fff;letter-spacing:1.5px;background:var(--ink);border-radius:7px;padding:3px 9px}
   .stage-title{font-size:16px;font-weight:700;letter-spacing:-.2px}
   .stage-count{font-size:11px;color:var(--muted);margin-left:auto}
   .stage-del{border:none;background:none;color:var(--muted);cursor:pointer;font-size:13px;padding:4px 7px;border-radius:7px;transition:all .15s}
   .stage-del:hover{color:var(--accent);background:var(--accent-soft)}
   .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-  .mcol{border:1.5px dashed var(--line);border-radius:12px;background:var(--bg2);padding:10px;min-height:96px;transition:background .18s, border-color .18s}
-  .mcol.dragover{background:#f3ead9;border-color:var(--accent);border-style:solid;transform:scale(1.008)}
+  .mcol{border:1.5px dashed #e4e1d6;border-radius:12px;background:var(--bg2);padding:10px;min-height:96px;transition:background .18s, border-color .18s}
+  .mcol.dragover{background:#fbf1e8;border-color:var(--accent);border-style:solid;transform:scale(1.006)}
   .mcol-head{display:flex;align-items:center;gap:7px;padding-bottom:8px}
   .dot-m{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
   .m-idea{background:var(--idea)} .m-prog{background:var(--prog)} .m-done{background:var(--done)}
   .mcol-head span.t{font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);flex:1}
-  .mcol-head .n{font-size:10px;font-weight:700;color:var(--muted);background:#ede7d8;border-radius:10px;padding:1px 7px}
+  .mcol-head .n{font-size:10px;font-weight:700;color:var(--muted);background:#eceae3;border-radius:10px;padding:1px 7px}
   .mcol-head button{border:none;background:none;color:var(--muted);font-size:15px;cursor:pointer;line-height:1;padding:1px 5px;border-radius:6px;transition:all .15s}
   .mcol-head button:hover{color:var(--accent);background:var(--accent-soft);transform:scale(1.15)}
   .task{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;
-        cursor:grab;box-shadow:0 1px 2px rgba(60,45,25,.04);transition:transform .15s, box-shadow .15s, border-color .15s;
+        cursor:grab;box-shadow:0 1px 2px rgba(25,25,23,.04);transition:transform .15s, box-shadow .15s, border-color .15s;
         position:relative;animation:fadein .2s ease}
-  .task:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift);border-color:#ddd3c0}
+  .task:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift);border-color:#ddd9cd}
   .task:active{cursor:grabbing}
   .task.dragging{opacity:.45;transform:rotate(1.5deg) scale(.98)}
   .mcol .task[data-pos="done"]::before{content:"";position:absolute;left:-1px;top:9px;bottom:9px;width:3px;background:var(--done);border-radius:3px}
-  .mcol .task[data-pos="done"]{opacity:.55;filter:saturate(.25);box-shadow:none;border-color:#efe8da}
+  .mcol .task[data-pos="done"]{opacity:.55;filter:saturate(.25);box-shadow:none;border-color:#efede7}
   .mcol .task[data-pos="done"]:hover{opacity:.85;filter:saturate(.55);transform:translateY(-2px);box-shadow:var(--shadow-lift)}
   .mcol .task[data-pos="done"] .task-title{color:var(--muted)}
   .mcol .task[data-pos="done"] .items .txt{color:var(--muted)}
   .task-head{display:flex;gap:5px;align-items:flex-start}
   .task-title{flex:1;font-weight:600;font-size:12.5px;outline:none;padding:2px 3px;word-break:break-word;border-radius:5px;transition:background .15s}
-  .task-title:hover{background:#faf6ee}
+  .task-title:hover{background:#faf9f5}
   .task-title:focus{background:#fdf5ec;box-shadow:0 0 0 2px var(--accent-soft)}
-  .icon-btn{border:none;background:none;color:#b9b2a2;cursor:pointer;font-size:12px;line-height:1;padding:3px 4px;border-radius:6px;transition:all .15s}
-  .icon-btn:hover{color:var(--ink);background:#f1ede3}
+  .icon-btn{border:none;background:none;color:#b6b2a6;cursor:pointer;font-size:12px;line-height:1;padding:3px 4px;border-radius:6px;transition:all .15s}
+  .icon-btn:hover{color:var(--ink);background:#f1efe8}
   .icon-btn.ok:hover{color:var(--done);background:#eef1e7}
   .icon-btn.del:hover{color:var(--accent);background:var(--accent-soft)}
   .items{list-style:none;margin-top:6px}
@@ -76,23 +76,38 @@
   li.done .txt{color:var(--muted);text-decoration:line-through}
   .txt{flex:1;font-size:11.5px}
   .add-item{display:flex;gap:5px;margin-top:7px}
-  .add-item input{flex:1;border:1px solid var(--line);border-radius:7px;padding:4.5px 8px;font-size:11px;background:var(--bg);outline:none;font-family:inherit;min-width:0;transition:border-color .15s, box-shadow .15s}
-  .add-item input::placeholder{color:#b9b2a2}
+  .add-item input{flex:1;border:1px solid var(--line);border-radius:7px;padding:4.5px 8px;font-size:11px;background:var(--bg2);outline:none;font-family:inherit;min-width:0;transition:border-color .15s, box-shadow .15s}
+  .add-item input::placeholder{color:#b6b2a6}
   .add-item input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
   .add-item button{border:1px solid var(--line);background:var(--card);border-radius:7px;cursor:pointer;color:var(--muted);font-size:12px;padding:0 8px;transition:all .15s}
   .add-item button:hover{color:#fff;background:var(--accent);border-color:var(--accent)}
-  .add-stage{width:100%;border:1.5px dashed #cfc8b8;background:transparent;border-radius:14px;padding:12px;color:var(--muted);
+  .add-stage{width:100%;border:1.5px dashed #d8d4c6;background:transparent;border-radius:14px;padding:12px;color:var(--muted);
              font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:22px;transition:all .2s;letter-spacing:.3px}
   .add-stage:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
-  .eco{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
-  .eco h2{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
-  .kpi{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg2);transition:transform .15s, box-shadow .15s}
-  .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-  .kpi .v{font-size:17px;font-weight:800;letter-spacing:-.3px}
-  .kpi .l{font-size:11px;color:var(--muted);margin-top:2px}
-  .foot{margin-top:16px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+  /* Калькулятор */
+  .calc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-top:6px}
+  .calc-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .calc-head h2{font-size:15px;font-weight:700}
+  .calc-head .note{font-size:11.5px;color:var(--muted)}
+  .calc .desc{font-size:11.5px;color:var(--muted);margin-bottom:16px}
+  .fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 14px}
+  .f{display:flex;flex-direction:column;gap:4px}
+  .f label{font-size:10.5px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+  .f input{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;font-family:inherit;background:var(--bg2);outline:none;transition:border-color .15s, box-shadow .15s, background .15s}
+  .f input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+  .res{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg2);transition:transform .15s, box-shadow .15s}
+  .res:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .res .v{font-size:19px;font-weight:800;letter-spacing:-.3px}
+  .res .l{font-size:11px;color:var(--muted);margin-top:2px}
+  .res.main{border-color:var(--accent);background:var(--accent-soft)}
+  .res.main .v{color:var(--accent)}
+  .res.dark{background:var(--ink);border-color:var(--ink)}
+  .res.dark .v{color:#fff}
+  .res.dark .l{color:#b9b4a6}
+  .foot{margin-top:18px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
   #loading{text-align:center;color:var(--muted);padding:60px 0;font-size:13px}
+  @media (max-width:760px){ .cols{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -111,18 +126,35 @@
 
   <button class="add-stage" onclick="addStage()">+ Добавить этап</button>
 
-  <div class="eco">
-    <h2>Экономика</h2>
-    <div class="grid">
-      <div class="kpi"><div class="v">249–349 ₽</div><div class="l">целевая полка за пауч 400–500 мл</div></div>
-      <div class="kpi"><div class="v">~700–900 ₽/кг</div><div class="l">нетто овощей — премиум ×3–4 к массе</div></div>
-      <div class="kpi"><div class="v">150–200 ₽</div><div class="l">отпуск производителя</div></div>
-      <div class="kpi"><div class="v">9–30 ₽</div><div class="l">пауч под ключ с клапаном, за шт</div></div>
-      <div class="kpi"><div class="v">60–90 дн</div><div class="l">срок годности при +2…+6°C</div></div>
-      <div class="kpi"><div class="v">1 цех</div><div class="l">партнёр: ТУ и сертификаты — у них</div></div>
+  <div class="calc">
+    <div class="calc-head"><h2>Калькулятор себестоимости</h2><span class="note">разовый — не сохраняется, обновил страницу и слетело</span></div>
+    <div class="desc">Считает пауч 400–500 мл: овощи + рассол. Меняй любое поле — цифры справа пересчитаются сразу.</div>
+    <div class="fields">
+      <div class="f"><label>Нетто овощей, г</label><input id="c1" type="number" value="350" oninput="calc()"></div>
+      <div class="f"><label>Цена овощей, ₽/кг</label><input id="c2" type="number" value="25" oninput="calc()"></div>
+      <div class="f"><label>Отходы при чистке/нарезке, %</label><input id="c3" type="number" value="15" oninput="calc()"></div>
+      <div class="f"><label>Соль, % от веса овощей</label><input id="c4" type="number" value="2" oninput="calc()"></div>
+      <div class="f"><label>Цена соли морской, ₽/кг</label><input id="c5" type="number" value="40" oninput="calc()"></div>
+      <div class="f"><label>Специи, чеснок, зелень, ₽/пауч</label><input id="c6" type="number" value="7" oninput="calc()"></div>
+      <div class="f"><label>Пакет с клапаном, ₽/шт</label><input id="c7" type="number" value="15" oninput="calc()"></div>
+      <div class="f"><label>Труд, мин/пауч</label><input id="c8" type="number" value="2.5" oninput="calc()"></div>
+      <div class="f"><label>Ставка труда, ₽/час</label><input id="c9" type="number" value="350" oninput="calc()"></div>
+      <div class="f"><label>Накладные (аренда/коммуналка/аморт.), ₽/пауч</label><input id="c10" type="number" value="10" oninput="calc()"></div>
+      <div class="f"><label>Логистика, ₽/пауч</label><input id="c11" type="number" value="8" oninput="calc()"></div>
+      <div class="f"><label>Брак и потери, %</label><input id="c12" type="number" value="6" oninput="calc()"></div>
+      <div class="f"><label>Наценка производителя, %</label><input id="c13" type="number" value="80" oninput="calc()"></div>
+      <div class="f"><label>Наценка розницы, %</label><input id="c14" type="number" value="80" oninput="calc()"></div>
+    </div>
+    <div class="results">
+      <div class="res dark"><div class="v" id="r-cost">—</div><div class="l">себестоимость, ₽/пауч</div></div>
+      <div class="res"><div class="v" id="r-wholesale">—</div><div class="l">отпуск производителя, ₽</div></div>
+      <div class="res main"><div class="v" id="r-shelf">—</div><div class="l">полка, ₽/пауч</div></div>
+      <div class="res"><div class="v" id="r-margin">—</div><div class="l">маржа производителя, ₽</div></div>
+      <div class="res"><div class="v" id="r-perkg">—</div><div class="l">полка в пересчёте, ₽/кг нетто</div></div>
     </div>
   </div>
-  <div class="foot">Финальная юнит-экономика — после цены цеха и пауча.</div>
+
+  <div class="foot">Данные доски — в общей базе. Калькулятор — локально, без сохранения.</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -304,6 +336,45 @@ function addStage(){
   state.push({id:uid(), title:name.trim(), tasks:[]});
   save(); render();
 }
+
+/* Калькулятор (разовый, без сохранения) */
+function v(id){ return parseFloat(document.getElementById(id).value) || 0; }
+function fmt(x){ return Math.round(x).toLocaleString('ru-RU'); }
+function calc(){
+  const netto_g = v('c1');        // г овощей нетто
+  const price_kg = v('c2');       // ₽/кг овощей
+  const waste = v('c3');          // % отходов
+  const salt_pct = v('c4');       // % соли
+  const salt_price = v('c5');     // ₽/кг соли
+  const spices = v('c6');         // ₽/пауч
+  const pouch = v('c7');          // ₽/шт
+  const minutes = v('c8');        // мин/пауч
+  const rate = v('c9');           // ₽/час
+  const overhead = v('c10');      // ₽/пауч
+  const logistics = v('c11');     // ₽/пауч
+  const loss = v('c12');          // % потерь
+  const markup_self = v('c13');   // % наценки производителя
+  const markup_retail = v('c14'); // % наценки розницы
+
+  const gross_kg = netto_g / 1000 / (1 - waste / 100);          // кг сырья с отходами
+  const veggies = gross_kg * price_kg;
+  const salt = (netto_g / 1000) * (salt_pct / 100) * salt_price;
+  const raw = veggies + salt + spices;
+  const labor = minutes / 60 * rate;
+  const subtotal = raw + pouch + labor + overhead + logistics;
+  const cost = subtotal * (1 + loss / 100);
+  const wholesale = cost * (1 + markup_self / 100);
+  const shelf = wholesale * (1 + markup_retail / 100);
+  const margin = wholesale - cost;
+  const per_kg = shelf / (netto_g / 1000);
+
+  document.getElementById('r-cost').textContent = fmt(cost) + ' ₽';
+  document.getElementById('r-wholesale').textContent = fmt(wholesale) + ' ₽';
+  document.getElementById('r-shelf').textContent = fmt(shelf) + ' ₽';
+  document.getElementById('r-margin').textContent = fmt(margin) + ' ₽ (' + Math.round(markup_self) + '% наценки)';
+  document.getElementById('r-perkg').textContent = fmt(per_kg) + ' ₽/кг';
+}
+calc();
 
 /* Загрузка из общей базы */
 boardDoc.onSnapshot(doc => {
