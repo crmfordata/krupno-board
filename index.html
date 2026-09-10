@@ -247,13 +247,44 @@ function render(){
   state.forEach((st, i) => box.appendChild(stageEl(st, i)));
 }
 
+function makeEditable(el, onSave){
+  let clicks = 0, timer = null, original = '';
+  el.addEventListener('click', () => {
+    if(el.isContentEditable) return;
+    clicks++;
+    clearTimeout(timer);
+    timer = setTimeout(() => { clicks = 0; }, 700);
+    if(clicks >= 3){
+      clicks = 0;
+      original = el.textContent;
+      el.contentEditable = 'true';
+      el.focus();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  });
+  el.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){ e.preventDefault(); el.blur(); }
+    if(e.key === 'Escape'){ el.textContent = original; el.blur(); }
+  });
+  el.addEventListener('blur', () => {
+    if(!el.isContentEditable) return;
+    el.contentEditable = 'false';
+    onSave(el.textContent.trim() || original);
+  });
+}
+
 function stageEl(st, i){
   const sec = document.createElement('div'); sec.className='stage'; sec.dataset.stage=st.id;
   const head = document.createElement('div'); head.className='stage-head';
   const num = document.createElement('span'); num.className='stage-num';
   num.textContent = String(i+1).padStart(2,'0');
   const title = document.createElement('span'); title.className='stage-title'; title.textContent = st.title;
-  title.onblur = () => { st.title = title.textContent.trim() || st.title; save(); render(); };
+  title.title = 'Тройной клик — переименовать';
+  makeEditable(title, v => { st.title = v; save(); render(); });
   const cnt = document.createElement('span'); cnt.className='stage-count'; cnt.textContent = st.tasks.length + ' задач';
   const del = document.createElement('button'); del.className='stage-del'; del.textContent='✕'; del.title='Удалить этап';
   del.onclick = () => { state = state.filter(x => x.id !== st.id); save(); render(); };
@@ -302,7 +333,8 @@ function taskEl(st, t){
 
   const head = document.createElement('div'); head.className='task-head';
   const title = document.createElement('div'); title.className='task-title'; title.textContent = t.title;
-  title.onblur = () => { t.title = title.textContent.trim() || t.title; save(); render(); };
+  title.title = 'Тройной клик — переименовать';
+  makeEditable(title, v => { t.title = v; save(); render(); });
   const ok = document.createElement('button'); ok.className='icon-btn ok'; ok.textContent='✓'; ok.title='В сделано';
   ok.onclick = e => { e.stopPropagation(); t.status='done'; save(); render(); };
   const del = document.createElement('button'); del.className='icon-btn del'; del.textContent='✕'; del.title='Удалить';
