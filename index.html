@@ -20,23 +20,6 @@
     font-size:13px; line-height:1.4; padding:34px 24px 56px; -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:1040px}
-  /* Логин */
-  #loginScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--bg),var(--bg2))}
-  .login-card{width:340px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px 28px;box-shadow:var(--shadow-lift)}
-  .login-card .logo-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-  .login-card .logo{width:36px;height:36px;border-radius:10px;background:var(--ink);color:var(--bg);
-        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
-  .login-card h1{font-size:24px;font-weight:800;letter-spacing:4px}
-  .login-card h1 .dot{color:var(--accent)}
-  .login-card .hint{color:var(--muted);font-size:12px;margin-bottom:20px}
-  .login-card label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
-  .login-card input{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;background:var(--bg);transition:border-color .15s, box-shadow .15s}
-  .login-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-  .login-card button{width:100%;margin-top:20px;background:var(--ink);color:var(--bg);border:none;border-radius:10px;
-        padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:opacity .15s}
-  .login-card button:hover{opacity:.85}
-  .login-card .err{color:var(--accent);font-size:12px;margin-top:12px;min-height:16px}
-  /* Шапка */
   .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
   .logo{width:38px;height:38px;border-radius:11px;background:var(--ink);color:var(--bg);
         display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;letter-spacing:1px}
@@ -44,13 +27,7 @@
   .brand .dot{color:var(--accent)}
   .tag{font-size:10.5px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:var(--olive);
        border:1px solid #cdd8c0;border-radius:20px;padding:4px 12px;background:#eef1e7}
-  .who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
-  .who b{color:var(--ink);font-weight:600}
-  .who button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 12px;cursor:pointer;
-              color:var(--muted);font-size:12px;font-family:inherit;transition:all .15s}
-  .who button:hover{color:var(--accent);border-color:var(--accent)}
   .sub{color:var(--muted);margin:-8px 0 22px;max-width:780px;font-size:12.5px}
-  /* Этап */
   .stage{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;margin-bottom:18px;
          box-shadow:var(--shadow);transition:box-shadow .2s, border-color .2s;animation:fadein .25s ease}
   .stage:hover{box-shadow:var(--shadow-lift);border-color:#ddd3c0}
@@ -115,58 +92,40 @@
   .kpi .v{font-size:17px;font-weight:800;letter-spacing:-.3px}
   .kpi .l{font-size:11px;color:var(--muted);margin-top:2px}
   .foot{margin-top:16px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
-  #board{display:none}
   #loading{text-align:center;color:var(--muted);padding:60px 0;font-size:13px}
 </style>
 </head>
 <body>
 
-<div id="loginScreen" style="display:none">
-  <div class="login-card">
-    <div class="logo-row"><div class="logo">К</div><h1>КРУПНО<span class="dot">.</span></h1></div>
-    <div class="hint">Доска запуска. Вход для своих.</div>
-    <label>Email</label>
-    <input id="email" type="email" placeholder="you@mail.ru" autocomplete="email">
-    <label>Пароль</label>
-    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
-    <button id="loginBtn">Войти</button>
-    <div class="err" id="loginErr"></div>
-  </div>
-</div>
-
 <div id="loading">Загрузка доски…</div>
 
-<div id="board">
-  <div class="wrap">
-    <div class="brand">
-      <div class="logo">К</div>
-      <h1>КРУПНО<span class="dot">.</span></h1>
-      <span class="tag">Живые ферментированные овощи</span>
-      <span class="who">вошёл как <b id="whoEmail"></b> <button id="logoutBtn">Выйти</button></span>
-    </div>
-    <div class="sub">Внутри каждого этапа — три секции: новая задача/идея → в процессе → сделано. Перетаскивай задачи, добавляй пункты, закрывай галочкой. Изменения видны всем участникам сразу.</div>
-
-    <div id="stages"></div>
-
-    <button class="add-stage" onclick="addStage()">+ Добавить этап</button>
-
-    <div class="eco">
-      <h2>Экономика</h2>
-      <div class="grid">
-        <div class="kpi"><div class="v">249–349 ₽</div><div class="l">целевая полка за пауч 400–500 мл</div></div>
-        <div class="kpi"><div class="v">~700–900 ₽/кг</div><div class="l">нетто овощей — премиум ×3–4 к массе</div></div>
-        <div class="kpi"><div class="v">150–200 ₽</div><div class="l">отпуск производителя</div></div>
-        <div class="kpi"><div class="v">9–30 ₽</div><div class="l">пауч под ключ с клапаном, за шт</div></div>
-        <div class="kpi"><div class="v">60–90 дн</div><div class="l">срок годности при +2…+6°C</div></div>
-        <div class="kpi"><div class="v">1 цех</div><div class="l">партнёр: ТУ и сертификаты — у них</div></div>
-      </div>
-    </div>
-    <div class="foot">Финальная юнит-экономика — после цены цеха и пауча.</div>
+<div class="wrap" id="board" style="display:none">
+  <div class="brand">
+    <div class="logo">К</div>
+    <h1>КРУПНО<span class="dot">.</span></h1>
+    <span class="tag">Живые ферментированные овощи</span>
   </div>
+  <div class="sub">Внутри каждого этапа — три секции: новая задача/идея → в процессе → сделано. Перетаскивай задачи, добавляй пункты, закрывай галочкой. Изменения сохраняются в общей базе и видны всем сразу.</div>
+
+  <div id="stages"></div>
+
+  <button class="add-stage" onclick="addStage()">+ Добавить этап</button>
+
+  <div class="eco">
+    <h2>Экономика</h2>
+    <div class="grid">
+      <div class="kpi"><div class="v">249–349 ₽</div><div class="l">целевая полка за пауч 400–500 мл</div></div>
+      <div class="kpi"><div class="v">~700–900 ₽/кг</div><div class="l">нетто овощей — премиум ×3–4 к массе</div></div>
+      <div class="kpi"><div class="v">150–200 ₽</div><div class="l">отпуск производителя</div></div>
+      <div class="kpi"><div class="v">9–30 ₽</div><div class="l">пауч под ключ с клапаном, за шт</div></div>
+      <div class="kpi"><div class="v">60–90 дн</div><div class="l">срок годности при +2…+6°C</div></div>
+      <div class="kpi"><div class="v">1 цех</div><div class="l">партнёр: ТУ и сертификаты — у них</div></div>
+    </div>
+  </div>
+  <div class="foot">Финальная юнит-экономика — после цены цеха и пауча.</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 const firebaseConfig = {
@@ -178,7 +137,6 @@ const firebaseConfig = {
   appId: "1:1073171502772:web:ee435eb8eeed4234cda9e1"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.firestore();
 const boardDoc = db.collection('board').doc('main');
 
@@ -347,68 +305,23 @@ function addStage(){
   save(); render();
 }
 
-/* ---- Firebase ---- */
-let unsub = null;
-
-function attachBoard(){
-  if(unsub) unsub();
-  document.getElementById('board').style.display = 'block';
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('whoEmail').textContent = auth.currentUser ? auth.currentUser.email : '';
-  unsub = boardDoc.onSnapshot(doc => {
-    if(doc.exists){
-      const remote = doc.data().stages;
-      if(JSON.stringify(remote) !== JSON.stringify(state)){
-        state = remote;
-        render();
-      }
-    } else {
-      boardDoc.set({ stages: DEFAULT }, { merge: true })
-        .then(() => { state = JSON.parse(JSON.stringify(DEFAULT)); render(); })
-        .catch(e => console.warn('init failed', e));
+/* Загрузка из общей базы */
+boardDoc.onSnapshot(doc => {
+  if(doc.exists){
+    const remote = doc.data().stages;
+    if(JSON.stringify(remote) !== JSON.stringify(state)){
+      state = remote;
+      render();
     }
-  }, err => {
-    console.warn('snapshot error', err);
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('loading').textContent = 'Нет доступа к базе: ' + (err && err.code ? err.code : 'ошибка');
-  });
-}
-
-const loginScreen = document.getElementById('loginScreen');
-document.getElementById('loginBtn').onclick = doLogin;
-function doLogin(){
-  const em = document.getElementById('email').value.trim();
-  const pw = document.getElementById('password').value;
-  const err = document.getElementById('loginErr');
-  err.textContent = '';
-  if(!em || !pw){ err.textContent = 'Введи email и пароль'; return; }
-  document.getElementById('loginBtn').disabled = true;
-  auth.signInWithEmailAndPassword(em, pw)
-    .catch(e => {
-      err.textContent = mapError(e.code);
-      document.getElementById('loginBtn').disabled = false;
-    });
-}
-function mapError(code){
-  if(code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') return 'Неверный email или пароль';
-  if(code === 'auth/unauthorized-domain') return 'Домен не разрешён — добавь его в Firebase (Authorized domains)';
-  if(code === 'auth/too-many-requests') return 'Слишком много попыток, подожди';
-  return 'Ошибка входа: ' + code;
-}
-document.getElementById('logoutBtn').onclick = () => auth.signOut();
-
-auth.onAuthStateChanged(user => {
-  if(user){
-    loginScreen.style.display = 'none';
-    attachBoard();
-  } else {
-    if(unsub){ unsub(); unsub = null; }
-    document.getElementById('board').style.display = 'none';
     document.getElementById('loading').style.display = 'none';
-    loginScreen.style.display = 'flex';
-    document.getElementById('password').value = '';
-    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('board').style.display = 'block';
+  } else {
+    boardDoc.set({ stages: DEFAULT }, { merge: true })
+      .then(() => { state = JSON.parse(JSON.stringify(DEFAULT)); render(); })
+      .catch(e => console.warn('init failed', e));
   }
+}, err => {
+  document.getElementById('loading').textContent = 'Нет доступа к базе: ' + (err && err.code ? err.code : 'ошибка') + '. Проверь правила Firestore.';
 });
 </script>
 </body>
